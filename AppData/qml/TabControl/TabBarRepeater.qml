@@ -63,10 +63,22 @@ Repeater {
     // 事件：收到移除下标为index标签页的指令
     function onDelTab(index) {
         if(itemAt(index).checked && model.count > 1) { // 跳转到最近的标签页
-            let go = (index+1 < model.count) ? index+1 : index-1
-            itemAt(go).checked = true
+            // 如果当前不是末尾，则跳到下一页，且下一页下标-1。否则直接跳到上一页。
+            if(index+1 < model.count) {
+                const item = itemAt(index+1)
+                item.index-- // 必须先刷新下标（不等resetTabIndex自动刷新），再选中。
+                item.checked = true
+            }else{
+                itemAt(index-1).checked = true
+            }
         }
         model.remove(index) // 删除按钮
+        let s = ""
+        for(let i in app.tab.pageList){
+            s += "|"+i+" "+app.tab.pageList[i].title
+            if(i == this)
+                s+="√"
+        }
     }
 
     // 事件：收到页面导航的指令
@@ -77,7 +89,10 @@ Repeater {
     }
 
     // 方法：改变选中页
-    function selectTab(index) { app.tab.selectTabPage(index) }
+    // function selectTab(index) { app.tab.selectTabPage(index) }
+    function selectTab(index) {
+        app.tab.selectTabPage(index)
+    }
 
     // 方法：重设所有标签组件的序号，防止增删后别的标签的位置错乱
     function resetTabIndex() { 

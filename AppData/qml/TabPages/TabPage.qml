@@ -53,7 +53,6 @@ No *intro* has been written for this **page**.`
     z: isActive ? 0:-1
     visible: isActive
 
-    
     // Component.onCompleted: {
     //     console.log("页生成：",title);
     // }

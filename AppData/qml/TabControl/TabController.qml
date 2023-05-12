@@ -47,9 +47,6 @@ Item {
         loadTabFiles()
     }
 
-    // 事件：文件加载状态改变。
-    onFileStatusChanged: { console.log("文件加载状态：", fileStatus) }
-
     // 函数：从列表list中寻找下标为a或[keyName]为a的项。
     function findList(list, key, keyName){
         if(typeof key === "number"){
@@ -152,7 +149,6 @@ Item {
                 bf.splice(i, 1)
         }
         // 若列表已空，则添加默认标签页
-        console.log("此时barCheckedIndex为：",barCheckedIndex)
         if(bf.length===0){ 
             const naviCom = getFile(0) // 获取默认标签页
             bf.push(naviCom.fileName) // 向标签栏添加这个页文件名
@@ -200,7 +196,6 @@ Item {
             function(){ 
                 for(let i in pageList){
                     const obj = pageList[i].obj
-                    console.log(`调用${i}`)
                     if(typeof obj.onReady === "function")
                         obj.onReady()
                     else
@@ -308,13 +303,9 @@ Item {
     // 方法：将一个原本在index的页移到go处
     function move(index, go){
         var x = pageList.splice(index, 1)[0] // 删除
-        console.log(x)
         pageList.splice(go, 0, x) // 添加
         var x = barFileNameList.splice(index, 1)[0]
-        console.log(x)
         barFileNameList.splice(go, 0, x)
-        console.log(`将一个原本在${index}的页移到${go}处`)
-        
     }
 
     // ========================= 【辅助组件】 =========================

@@ -35,7 +35,6 @@ TabPage {
                 "fileIndex": i
             })
         }
-        console.log(pageModel)
     }
     Component.onCompleted: initData()
     // 动态变化的简介文本
@@ -89,7 +88,6 @@ TabPage {
                                         naviPage.introText = intro
                                     }
                                     onClicked: {
-                                        console.log("点击",text)
                                         // 寻找本组件在pageList的下标
                                         const list = app.tab.pageList
                                         let i, c=list.length
