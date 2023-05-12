@@ -42,9 +42,10 @@ Item {
     
     // ========================= 【执行：初始化】 =========================
 
-    // 事件：启动时加载文件 TODO: 异步加载
+    // 事件：启动时加载文件
     Component.onCompleted: {
-        loadTabFiles()
+        // 推迟到下一循环，等静态元素初始化完毕后才开始加载文件
+        Qt.callLater(loadTabFiles) 
     }
 
     // 函数：从列表list中寻找下标为a或[keyName]为a的项。
