@@ -200,7 +200,7 @@ Item {
                     if(typeof obj.onReady === "function")
                         obj.onReady()
                     else
-                        console.log(`Error: 调用${i}-${obj.title}启动方法失败`)
+                        console.log(`Error: 调用第${i}个-${obj.title}启动方法失败，类型为${obj.onReady}`)
                 }
             }
         )
@@ -237,6 +237,9 @@ Item {
         if (typeof tabBarRepeater.onAddTab === "function") {
             tabBarRepeater.onAddTab(index, fileIndex)
         }
+        if (typeof obj.onReady === "function") {
+            Qt.callLater(obj.onReady)  // 下一循环调用启动方法
+        }
         settings.save() // 刷新保存
     }
 
@@ -264,6 +267,9 @@ Item {
         // 回调
         if (typeof tabBarRepeater.onNaviTab === "function") {
             tabBarRepeater.onNaviTab(index, fileIndex)
+        }
+        if (typeof obj.onReady === "function") {
+            Qt.callLater(obj.onReady)  // 下一循环调用启动方法
         }
         settings.save() // 刷新保存
         // 若当前页是选中状态，则重新设置选中。

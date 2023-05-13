@@ -38,8 +38,9 @@ Rectangle {
 No *intro* has been written for this **page**.`
 
     property var onReady: ()=>{
-         // 程序主框架初始化完成后调用的函数，可重载以实现页面自己的加载
-        console.log("准备方法：",title);
+        // 代替Component.onCompleted ，在该页生成后被调用
+        // 可重载以实现页面自己的延迟加载，比如将长耗时操作、复杂Loader的加载等放在这里面。
+        console.log("onReady : ",title);
     }
 
     // 不可设定

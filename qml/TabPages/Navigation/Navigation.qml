@@ -36,7 +36,6 @@ TabPage {
             })
         }
     }
-    Component.onCompleted: initData()
     // 动态变化的简介文本
     property string introText: qsTr(`# 欢迎使用 TabView-Demo
   
