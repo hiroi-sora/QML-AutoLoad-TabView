@@ -15,8 +15,8 @@ Window {
     visible: true
     // flags: Qt.Window | Qt.FramelessWindowHint // 无边框窗口，保留任务栏图标
 
-    width: 1280
-    height: 720
+    width: 1000
+    height: 600
     color: "#00000000"
 
 
@@ -70,11 +70,8 @@ Window {
                 }
             }
 
-            // 标签栏
+            // 标签页主体
             HTabLayout { }
         }
     }
-
-    
-    
 }
