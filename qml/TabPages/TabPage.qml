@@ -36,7 +36,7 @@ Rectangle {
     property string intro: "" // 简介，支持MarkDown语法  
 
     property var onReady: ()=>{
-        // 代替Component.onCompleted ，在该页生成后被调用
+        // 代替 Component.onCompleted ，在该页生成后被调用
         // 可重载以实现页面自己的延迟加载，比如将长耗时操作、复杂Loader的加载等放在这里面。
         console.log("onReady : ",title);
     }
