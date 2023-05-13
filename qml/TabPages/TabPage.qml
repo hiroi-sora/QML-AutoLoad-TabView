@@ -33,9 +33,7 @@ Rectangle {
     // 可设定值
     property string title: "Unknown Tab" // 标签页名称
     property int index: 123 // 在导航页的排序，越小越靠前，允许但不应该重复，自定义值不得小于1
-    property string intro: `# Unknown Tab
-// 简介，支持MarkDown语法  
-No *intro* has been written for this **page**.`
+    property string intro: "" // 简介，支持MarkDown语法  
 
     property var onReady: ()=>{
         // 代替Component.onCompleted ，在该页生成后被调用

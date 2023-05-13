@@ -10,10 +10,6 @@ TabPage {
     // 设定值
     title: `测试页 ${test}`
     index: 7
-    intro: `# 测试页${test}  
-  
-这里是<font color='blue'>**测试页${test}**</font>的简介。 ~（凑字数）~    
-`
 
     Rectangle {
         anchors.fill: parent
