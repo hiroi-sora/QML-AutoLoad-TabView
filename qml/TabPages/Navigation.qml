@@ -8,38 +8,35 @@ import QtQuick.Layouts 1.15
 
 import ".."
 
-TabPage {
-    title: qsTr("新标签页")
-    index: -1 // 导航页的排序为最小值，保证在所有页之前
+Rectangle {
 
     // =============== 逻辑 ===============
 
     id: naviPage
+    anchors.fill: parent
     
     ListModel { // 所有页面的标题
         id: pageModel
     }
+    
     // 初始化数据
-    onReady: ()=>{
-        initData()
-    }
+    Component.onCompleted: initData()
     function initData() {
         pageModel.clear()
-        const f = app.tab.fileList
+        const f = app.tab.infoList
         // 遍历所有文件信息（排除第一项自己）
         for(let i=1,c=f.length; i<c; i++){
             pageModel.append({
                 "title": f[i].title,
                 "intro": f[i].intro,
-                "fileName": f[i].fileName,
-                "fileIndex": i
+                "infoIndex": i,
             })
         }
     }
     // 动态变化的简介文本
-    property string introText: qsTr(`# 欢迎使用 TabView-Demo
+    property string introText: qsTr(`# 欢迎使用
   
-请选择切换一个页面。`)
+请选择切换一个功能页。`)
 
 
     // =============== 布局 ===============
@@ -87,19 +84,11 @@ TabPage {
                                         naviPage.introText = intro
                                     }
                                     onClicked: {
-                                        // 寻找本组件在pageList的下标
-                                        const list = app.tab.pageList
-                                        let i, c=list.length
-                                        for(i=0; i<c; i++){
-                                            if(list[i].obj===naviPage){
-                                                break
-                                            }
+                                        let i = app.tab.getTabPageIndex(naviPage)
+                                        if(i < 0){
+                                            console.error("【Error】导航页"+text+"未找到下标！")
                                         }
-                                        if(i === c) {
-                                            console.log("Error: 未在pageList找到导航页对象！")
-                                            return
-                                        }
-                                        app.tab.naviTabPage(i, fileIndex)
+                                        app.tab.changeTabPage(i, infoIndex)
                                     }
                                     
                                     background: Rectangle {

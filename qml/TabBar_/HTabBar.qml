@@ -11,7 +11,7 @@ RowLayout  {
     anchors.fill: parent
     spacing: 0
 
-    // 标签栏控制（左）
+    // 标签栏控制（左，置顶按钮）
     Rectangle  {
         visible: false // 先隐藏
         id: hTabBarCtrlLeft
@@ -34,7 +34,7 @@ RowLayout  {
         function resetTabBtnWidth() {
             let w = hTabBarMain.width
             if(!app.tab.barIsLock) w -= tabBarControl.width // 无锁定时，减去+按钮宽度
-            w = Math.round(w / tabBarRepeater.model.count)
+            w = Math.round(w / barController.model.count)
             tabWidth = Math.min(w, maxTabWidth)
         }
         onWidthChanged: resetTabBtnWidth()  // 监听标签栏总宽度变化
@@ -47,7 +47,8 @@ RowLayout  {
         MouseArea { // 点击标签栏空余位置，都是添加新标签
             anchors.fill: parent
             onClicked: {
-                if(!app.tab.barIsLock) tabBarRepeater.addNavi()
+                if(!app.tab.barIsLock)
+                    app.tab.addNavi() // 添加导航页
             }
         }
 
@@ -79,21 +80,16 @@ RowLayout  {
             spacing: -2 // 给负的间隔，是为了让选中标签能覆盖左右两边标签的竖线
 
             // ===== 标签按钮组 =====
-            TabBarRepeater {
-                id: tabBarRepeater
+            BarController {
+                id: barController
                 // 标签元素模板
-                delegate: HTabButton {
+                delegate: TabButton_ {
                     title: title_ // 标题
-                    index: index_ // 位序
                     checked: checked_ // 初始时是否选中
+                    index: index_ // 初始位置
                     width: hTabBarMain.tabWidth
                     height: hTabBarMain.height
                 }
-
-                // 事件：按钮数量变化
-                onCountChanged: hTabBarMain.resetTabBtnWidth()
-
-                // ========================= 【拖拽相关】 =========================
 
                 // 事件：创建新标签时（与父类的槽同时生效）
                 onItemAdded: { 
@@ -102,6 +98,11 @@ RowLayout  {
                     item.dragFinish.connect(dragFinish)
                     item.dragMoving.connect(dragMoving)
                 }
+
+                // 事件：按钮数量变化
+                onCountChanged: hTabBarMain.resetTabBtnWidth()
+
+                // ========================= 【拖拽相关】 =========================
 
                 property var intervalList: [] // 记录按钮位置区间的列表
                 property var originalPosList: [] // 记录按钮初始位置的列表
@@ -120,7 +121,7 @@ RowLayout  {
                     dragIndicator.visible = true
 
                 }
-                function btnDragIndex(index){ // 方法：返回当前index应该所处的序号
+                function btnDragIndex(index){ // 函数：返回当前index应该所处的序号
                     const dragItem = itemAt(index)
                     const x = dragItem.x + Math.round(dragItem.width/2) // 被拖动按钮的中心位置
                     let go = 0 // 应该拖放到的位置
@@ -139,12 +140,12 @@ RowLayout  {
                     dragIndicator.visible = false
                     let go = btnDragIndex(index) // 应该拖放到的序号
                     if(index !== go){ // 需要移动
-                        model.move(index, go, 1)
-                        app.tab.move(index, go)
+                        // model.move(index, go, 1)
+                        app.tab.moveTabPage(index, go)
                     } else { // 无需移动，则回到原位
                         itemAt(index).x = originalX
                     }
-                    resetTabIndex()
+                    resetIndex()
                 }
             }
             
@@ -179,7 +180,7 @@ RowLayout  {
                         )
                     }
                     onClicked: {
-                        tabBarRepeater.addNavi()
+                        app.tab.addNavi() // 添加导航页
                     }
                 }
             }
@@ -203,7 +204,7 @@ RowLayout  {
         }
     }
 
-    // 标签栏控制（右）
+    // 标签栏控制（右，锁定按钮）
     Rectangle  {
         id: hTabBarCtrlRight
         Layout.fillHeight: true

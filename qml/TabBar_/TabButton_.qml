@@ -7,33 +7,19 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 
-TabButton {
+Button {
 
     // 设定值
     property string title: "Unknown TabBtn" // 显示的标题
     property int index: -1 // 在标签栏中的序号
-    property bool isLock: app.tab.barIsLock  // 是否已锁定
 
     // 默认值
-    implicitWidth: 150
-    implicitHeight: parent.height
+    checkable: false // 手动控制
     z: checked? 100 : 0 // 选中模式下弹到顶层
     // 信号
-    signal toDel(int index) // 关闭按钮的信号
-    signal toChecked(int index) // 选中按钮的信号
-
     signal dragStart(int index) // 开始拖拽的信号
     signal dragFinish(int index) // 结束拖拽的信号
     signal dragMoving(int index, int x) // 拖拽移动的信号
-
-    // 监听选中
-    onCheckedChanged: {
-        if(checked) toChecked(index) // 发送信号
-    }
-    Component.onCompleted: {
-        if(checked) Qt.callLater(toChecked,index) // 初始选中也发送信号
-    }
-    
 
     // 按钮前景
     contentItem: RowLayout {
@@ -56,7 +42,7 @@ TabButton {
         // 关闭按钮
         Button {
             // 未锁定，且主按钮悬停或选中时才显示
-            visible: !parent.parent.isLock & (parent.parent.hovered | parent.parent.checked)
+            visible: !app.tab.barIsLock & (parent.parent.hovered | parent.parent.checked)
             Layout.alignment: Qt.AlignRight
             implicitWidth: 24
             implicitHeight: 24
@@ -73,7 +59,7 @@ TabButton {
                 )
             }
             onClicked: {
-                toDel(index) // 发送信号
+                app.tab.delTabPage(index)
             }
         }
     }
@@ -93,7 +79,7 @@ TabButton {
             acceptedButtons: Qt.LeftButton | Qt.MiddleButton
 
             // 拖拽
-            drag.target: parent.parent.isLock ? null : parent.parent // 动态启用、禁用拖拽
+            drag.target: app.tab.barIsLock ? null : parent.parent // 动态启用、禁用拖拽
             drag.axis: Drag.XAxis // 只能沿X轴
             drag.threshold: 50 // 起始阈值
             property bool dragActive: drag.active // 动态记录拖拽状态
@@ -101,14 +87,12 @@ TabButton {
             
             onPressed: { // 左键按下，切换焦点
                 if(mouse.button === Qt.LeftButton) {
-                    if(! parent.parent.checked){
-                        parent.parent.checked = true
-                    }
+                    app.tab.showTabPage(index)
                 }
             }
             onClicked: { // 中键点击，删除标签
-                if(mouse.button === Qt.MiddleButton && !parent.parent.isLock) {
-                    toDel(index) // 发送信号
+                if(mouse.button === Qt.MiddleButton && !app.tab.barIsLock) {
+                    app.tab.delTabPage(index)
                 }
             }
             onDragActiveChanged: {

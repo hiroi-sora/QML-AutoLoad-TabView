@@ -8,8 +8,6 @@ import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.15
 import Qt.labs.settings 1.1
 
-import "./TabControl"
-
 Window {
     id: root
     visible: true
@@ -19,13 +17,12 @@ Window {
     height: 600
     color: "#00000000"
 
-
     // 定义全局对象，通过 app 来访问
     Item {
         id: app
 
         // 标签页逻辑控制器
-        TabController { id: tab_ }
+        TabViewController { id: tab_ }
         property var tab: tab_ // 通过 app.tab 来访问
 
         // 持久化存储
@@ -34,12 +31,14 @@ Window {
             fileName: "./.settings_ui.ini" // 配置文件名
 
 
-            property alias barFileNameList: tab_.barFileNameList
-            property alias barCheckedIndex: tab_.barCheckedIndex
+            property alias openPageList: tab_.openPageList
+            property alias showPageIndex: tab_.showPageIndex
             property alias barIsLock: tab_.barIsLock
 
             property bool refresh: false // 用于刷新
-            function save(){refresh=!refresh}
+            function save(){ // 手动刷新
+                refresh=!refresh
+            }
         }
     }
 
@@ -70,8 +69,11 @@ Window {
                 }
             }
 
-            // 标签页主体
-            HTabLayout { }
+            // 标签视图
+            TabView_ { }
         }
     }
+
+    
+    
 }

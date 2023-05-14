@@ -4,35 +4,38 @@
 
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import "TabBar_"
 
-Tabs{
-    id: tabs
+Rectangle {
+    
+    anchors.fill: parent
+    
 
+    // 上下布局，即标签栏在顶部
     ColumnLayout{
         anchors.fill: parent
         spacing: 0
 
-        // 标签按钮容器
+        // 标签栏容器
         Rectangle {
-            id: hTabBarContainer
             Layout.fillWidth: true
             height: 40
-
             color: "#F3F3F3"
 
             HTabBar { }
         }
 
-        // 标签页容器，只负责展示，不负责逻辑
-        Item {
-            id: hTabsContainer
+        // 标签页容器
+        Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            color: "#FFF"
 
-            // 获取页面内容控件
-            Component.onCompleted: { 
-                app.tab.pageContainer.parent = this
+            
+            Component.onCompleted: {
+                app.tab.page.pagesNest.parent = this
             }
+            
         }
     }
 }
