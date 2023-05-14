@@ -2,6 +2,8 @@
 
 这是一个Qt QML的小demo，演示一种可以自动搜索本地页面文件并加载页面的标签页系统。
 
+另外还有静态加载版本，在 [static-load 分支](https://github.com/hiroi-sora/QML-AutoLoad-TabView/tree/static-load) 。
+
 可用于设计一个有多种独立功能的软件界面，让用户自由选择应该展示哪些常用功能页面，隐藏不常用功能。
 
 ![主页](README_Images/导航页1.png)
